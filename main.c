@@ -64,45 +64,55 @@ int main(void)
 		/* Check if the '=' key is pressed*/
 		else if(key == '=')
 		{
+			/* If no operator is entered, display num1 as the result*/
+			if(operator == '\0') 
+			{
+				LCD_moveCursor(1,0); /* Move cursor to the second row*/
+				LCD_integerToString(num1); /* Display num1 as the result*/
+			}
 			/* Perform calculation based on the operator*/
-			switch(operator)
-				{
-					case '+':
-						result = num1+num2; /* Addition*/
-						LCD_moveCursor(1,0);/* Move cursor to the beginning of the second row*/
-						LCD_integerToString(result);/* Display the result*/
-						break;
-					case '-':
-						result = num1-num2;/* Subtraction*/
-						LCD_moveCursor(1,0); /* Move cursor to the beginning of the second row*/
-						LCD_integerToString(result);/* Display the result*/
-						break;
-					case '%':
-						/* Check for division by zero*/
-						if (num2 != 0)
-						{
-							result = (float)num1 / num2;/* Division*/
+			else
+			{
+				/* Perform calculation based on the operator*/
+				switch(operator)
+					{
+						case '+':
+							result = num1+num2; /* Addition*/
+							LCD_moveCursor(1,0);/* Move cursor to the beginning of the second row*/
+							LCD_integerToString(result);/* Display the result*/
+							break;
+						case '-':
+							result = num1-num2;/* Subtraction*/
 							LCD_moveCursor(1,0); /* Move cursor to the beginning of the second row*/
-							LCD_floatToString(result);/* Display the result*/
-						}
-						else
-						{
+							LCD_integerToString(result);/* Display the result*/
+							break;
+						case '%':
+							/* Check for division by zero*/
+							if (num2 != 0)
+							{
+								result = (float)num1 / num2;/* Division*/
+								LCD_moveCursor(1,0); /* Move cursor to the beginning of the second row*/
+								LCD_floatToString(result);/* Display the result*/
+							}
+							else
+							{
+								LCD_clearScreen();/* Clear the LCD*/
+								LCD_displayString("Error: div by 0"); /* Display error message*/
+								_delay_ms(1000);/* Wait for a second*/
+								continue;/* Skip to the next iteration*/
+							}
+							break;
+						case '*':
+							result = num1*num2;/* Multiplication*/
+							LCD_moveCursor(1,0);/* Move cursor to the beginning of the second row*/
+							LCD_integerToString(result);/* Display the result*/
+							break;
+						default:
 							LCD_clearScreen();/* Clear the LCD*/
-							LCD_displayString("Error: div by 0"); /* Display error message*/
-							_delay_ms(1000);/* Wait for a second*/
-							continue;/* Skip to the next iteration*/
-						}
-						break;
-					case '*':
-						result = num1*num2;/* Multiplication*/
-						LCD_moveCursor(1,0);/* Move cursor to the beginning of the second row*/
-						LCD_integerToString(result);/* Display the result*/
-						break;
-					default:
-						LCD_clearScreen();/* Clear the LCD*/
-						LCD_displayString("Unknown Operator!");/* Display error message*/
-						break;
-				}
+							LCD_displayString("Unknown Operator!");/* Display error message*/
+							break;
+					}
+			}
 		}
 		/* Check if the reset key is pressed*/
 		else if(key == 13)/* Assuming 13 is the reset key*/
